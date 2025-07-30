@@ -1,0 +1,68 @@
+[
+  {
+    "title": "Tableau de bord",
+    "icon": "lucide-square-kanban",
+    "route": "home"
+  },
+  {
+    "title": "Pages",
+    "icon": "lucide-sticky-note",
+    "open": false,
+    "children": [
+      { "title": "Toutes les pages", "route": "home" },
+      { "title": "Ajouter une page", "route": "home" }
+    ]
+  },
+  {
+    "title": "Articles",
+    "icon": "lucide-file-text",
+    "open": false,
+    "children": [
+      { "title": "Tous les articles", "route": "home" },
+      { "title": "Ajouter un article", "route": "home" },
+      { "title": "Catégories", "route": "home" },
+      { "title": "Étiquettes", "route": "home" }
+    ]
+  },
+  {
+    "title": "Médias",
+    "icon": "lucide-images",
+    "open": false,
+    "children": [
+      { "title": "Bibliothèque", "route": "home" },
+      { "title": "Ajouter un média", "route": "home" }
+    ]
+  },
+  {
+    "title": "Commentaires",
+    "icon": "lucide-message-circle",
+    "route": "home"
+  },
+  {
+    "title": "Thèmes",
+    "icon": "lucide-swatch-book",
+    "route": "home"
+  },
+  {
+    "title": "Modules",
+    "icon": "lucide-puzzle",
+    "route": "home"
+  },
+  {
+    "title": "Paramètres du site",
+    "icon": "lucide-settings",
+    "open": false,
+    "children": [
+      { "title": "Paramètre généraux", "route": "home" },
+      {
+        "title": "Gestions des utilisateurs",
+        "open": true,
+        "children": [
+          { "title": "Liste des utilisateurs", "route": "home" },
+          { "title": "Ajouter un utilisateur", "route": "home" },
+          { "title": "Rôles et permissions", "route": "home" }
+        ]
+      }
+    ]
+  }
+]
