@@ -12,7 +12,10 @@
     <h1>Welcome to the CMS</h1>
     <p>Response Time: {{ round((microtime(true) - LARAVEL_START) * 1000, 2) }} ms</p>
 
-    <button class="btn btn-primary" x-data="{ label: 'Click Here' }" x-text="label"></button>
+    <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+        @csrf
+        <button type="submit" class="btn btn-primary">Logout</button>
+    </form>
 </body>
 
 </html>

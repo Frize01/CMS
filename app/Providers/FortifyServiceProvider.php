@@ -36,7 +36,7 @@ class FortifyServiceProvider extends ServiceProvider
         // Fortify::redirectUserForTwoFactorAuthenticationUsing(RedirectIfTwoFactorAuthenticatable::class);
 
         RateLimiter::for('login', function (Request $request) {
-            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
+            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());
 
             return Limit::perMinute(5)->by($throttleKey);
         });
@@ -58,10 +58,19 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         // Define the view for the password reset page
+
         Fortify::requestPasswordResetLinkView(function () {
             return view('auth.forgot-password');
         });
 
+        // Define the view for the password reset confirmation page
+
+        Fortify::resetPasswordView(function (Request $request) {
+            return view('auth.reset-password', ['request' => $request]);
+        });
+
+        // TODO: Define the view for the email verification page
+        // https://laravel.com/docs/12.x/fortify#email-verification
         // Define the view for the email verification page
         Fortify::verifyEmailView(function () {
             return view('auth.verify-email');

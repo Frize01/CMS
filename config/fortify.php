@@ -73,7 +73,8 @@ return [
     |
     */
 
-    'home' => '/home',
+    'home' => '/',
+    // TODO : Renvoyer vers le tableau de bord
 
     /*
     |--------------------------------------------------------------------------
@@ -153,7 +154,7 @@ return [
             'confirm' => true,
             'confirmPassword' => true,
             // 'window' => 0,
-        ]),
+        ])
     ],
 
 ];
