@@ -22,15 +22,24 @@
                     </div>
                 @endif
 
-                <form action="{{ route('password.email') }}" method="POST" class="flex flex-col gap-4">
+                <form action="{{ route('password.update') }}" method="POST" class="flex flex-col gap-4">
                     @csrf
+                    <input type="hidden" name="token" value="{{ request()->route('token') }}">
                     <div class="flex flex-col gap-2">
                         <label class="label">Adresse mail</label>
                         <input type="email" name="email" class="input{{ $errors->any() ? ' input-warning' : '' }}"
-                            placeholder="Adresse mail" />
+                            placeholder="Adresse mail" value="{{ old('email') }}" required autofocus />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="label">Nouveau mot de passe</label>
+                        <input type="password" name="password" class="input{{ $errors->any() ? ' input-warning' : '' }}" placeholder="Nouveau mot de passe" required />
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label class="label">Confirmer le mot de passe</label>
+                        <input type="password" name="password_confirmation" class="input{{ $errors->any() ? ' input-warning' : '' }}" placeholder="Confirmer le mot de passe" required />
                     </div>
 
-                    <button class="btn btn-neutral">M'envoyer un lien</button>
+                    <button class="btn btn-neutral">Réinitialiser le mot de passe</button>
                 </form>
             </fieldset>
         </div>

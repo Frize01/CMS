@@ -4,7 +4,7 @@
             <input id="my-drawer" type="checkbox" class="drawer-toggle" />
             <div class="drawer-content">
                 <label for="my-drawer" class="btn btn-outline drawer-button">
-                    <x-dynamic-component component="lucide-menu"/>
+                    <x-dynamic-component component="lucide-menu" />
                 </label>
             </div>
             <div class="drawer-side">
@@ -14,9 +14,17 @@
                 @endphp
 
                 <ul class="menu gap-4 pt-5 bg-base-200 text-base-content min-h-full w-80">
-                    @foreach($menu as $item)
+                    @foreach ($menu as $item)
                         <x-admin.menu-item :item="$item" />
                     @endforeach
+
+                    <li>
+                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                            @csrf
+                            <x-dynamic-component :component="'lucide-log-out'" class="inline-block mr-2"/>
+                            <button type="submit" class="">Logout</button>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>
