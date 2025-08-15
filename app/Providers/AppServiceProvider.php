@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Vite::useScriptTagAttributes(['defer' => false]);
+        Vite::useScriptTagAttributes(['defer' => true]);
+
+        if (config('app.env') !== 'local') {
+            URL::forceScheme('https');
+        }
     }
 }
