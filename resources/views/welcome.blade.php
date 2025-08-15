@@ -10,7 +10,6 @@
 
 <body>
     <h1>Welcome to the CMS</h1>
-    <p>Response Time: {{ round((microtime(true) - LARAVEL_START) * 1000, 2) }} ms</p>
 
     <form action="{{ route('logout') }}" method="POST" style="display: inline;">
         @csrf

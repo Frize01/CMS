@@ -1,0 +1,48 @@
+stages:
+  - test
+  - migrate
+  - deploy
+
+test:
+  stage: test
+  image: php:8.4-bullseye
+  script:
+    - apt-get update && apt-get install -y unzip git npm sqlite3 libsqlite3-dev curl
+    - curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+    - apt-get install -y nodejs
+    - node -v
+    - npm -v
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    - composer install --no-interaction --prefer-dist --optimize-autoloader
+    - npm install
+    - npm run build
+    - cp .env.example .env
+    - php artisan key:generate
+    - php artisan test
+  variables:
+    APP_ENV: testing
+    DB_CONNECTION: sqlite
+    DB_DATABASE: ":memory:"
+
+migrate:
+  stage: migrate
+  image: composer:2
+  script:
+    - composer install --no-interaction --prefer-dist --optimize-autoloader
+    - apt-get update && apt-get install -y php php-sqlite3 unzip git
+    - cp .env.example .env
+    - php artisan migrate --force
+  variables:
+    APP_KEY: $APP_KEY
+    APP_ENV: demo
+    DB_URL: $DB_URL
+  only:
+    - main
+
+deploy:
+  stage: deploy
+  image: curlimages/curl:latest
+  script:
+    - curl -X POST "$VERCEL_DEPLOY_HOOK_URL"
+  only:
+    - main
