@@ -30,14 +30,14 @@ jobs:
           APP_ENV: testing
           DB_CONNECTION: sqlite
           DB_DATABASE: ":memory:"
-      # - name: Run migrations (prod)
-      #   run: php artisan migrate --force
-      #   env:
-      #     APP_KEY: ${{ secrets.APP_KEY }}
-      #     APP_ENV: production
-      #     DB_URL: ${{ secrets.DB_URL }}
-      # - name: Trigger Vercel Deploy Hook
-      #   run: curl -X POST ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+      - name: Run migrations (prod)
+        run: php artisan migrate --force
+        env:
+          APP_KEY: ${{ secrets.APP_KEY }}
+          APP_ENV: production
+          DB_URL: ${{ secrets.DB_URL }}
+      - name: Trigger Vercel Deploy Hook
+        run: curl -X POST ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
       - uses: actions/cache@v4
         with:
           path: vendor
