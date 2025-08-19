@@ -1,7 +1,7 @@
 stages:
   - test
-  - migrate
-  - deploy
+  # - migrate
+  # - deploy
 
 test:
   stage: test
@@ -24,25 +24,25 @@ test:
     DB_CONNECTION: sqlite
     DB_DATABASE: ":memory:"
 
-migrate:
-  stage: migrate
-  image: composer:2
-  script:
-    - composer install --no-interaction --prefer-dist --optimize-autoloader
-    - apt-get update && apt-get install -y php php-sqlite3 unzip git
-    - cp .env.example .env
-    - php artisan migrate --force
-  variables:
-    APP_KEY: $APP_KEY
-    APP_ENV: demo
-    DB_URL: $DB_URL
-  only:
-    - main
+# migrate:
+#   stage: migrate
+#   image: composer:2
+#   script:
+#     - composer install --no-interaction --prefer-dist --optimize-autoloader
+#     - apt-get update && apt-get install -y php php-pgsql unzip git
+#     - cp .env.example .env
+#     - php artisan migrate --force
+#   variables:
+#     APP_KEY: $APP_KEY
+#     DB_CONNECTION: pgsql
+#     APP_ENV: demo
+#     DB_URL: $DB_URL
 
-deploy:
-  stage: deploy
-  image: curlimages/curl:latest
-  script:
-    - curl -X POST "$VERCEL_DEPLOY_HOOK_URL"
-  only:
-    - main
+
+# deploy:
+#   stage: deploy
+#   image: curlimages/curl:latest
+#   script:
+#     - curl -X POST "$VERCEL_DEPLOY_HOOK_URL"
+#   only:
+#     - main
