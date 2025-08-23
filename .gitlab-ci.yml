@@ -1,18 +1,24 @@
 stages:
   - test
-  # - migrate
-  # - deploy
+  - deploy_migrate
+
+default:
+  image: php:8.4-cli
+  before_script:
+    - apt-get update && apt-get install -y curl unzip git libpq-dev
+    - docker-php-ext-install pdo pdo_pgsql
+    - curl -sS https://getcomposer.org/installer | php
+    - mv composer.phar /usr/local/bin/composer
+    - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+    - apt-get install -y nodejs
+    - php -v
+    - node -v
+    - npm -v
+    - composer --version
 
 test:
   stage: test
-  image: php:8.4-bullseye
   script:
-    - apt-get update && apt-get install -y unzip git npm sqlite3 libsqlite3-dev curl
-    - curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-    - apt-get install -y nodejs
-    - node -v
-    - npm -v
-    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
     - composer install --no-interaction --prefer-dist --optimize-autoloader
     - npm install
     - npm run build
@@ -24,25 +30,33 @@ test:
     DB_CONNECTION: sqlite
     DB_DATABASE: ":memory:"
 
-# migrate:
-#   stage: migrate
-#   image: composer:2
-#   script:
-#     - composer install --no-interaction --prefer-dist --optimize-autoloader
-#     - apt-get update && apt-get install -y php php-pgsql unzip git
-#     - cp .env.example .env
-#     - php artisan migrate --force
-#   variables:
-#     APP_KEY: $APP_KEY
-#     DB_CONNECTION: pgsql
-#     APP_ENV: demo
-#     DB_URL: $DB_URL
+migrate:
+  stage: deploy_migrate
+  script:
+    - composer install --no-interaction --prefer-dist --optimize-autoloader
+    - npm install
+    - npm run build
+    - cp .env.example .env
+    - php artisan migrate:fresh --seed --force
+  variables:
+    APP_KEY: $APP_KEY
+    APP_ENV: production
+    DB_CONNECTION: pgsql
+    DB_HOST: $DB_HOST
+    DB_DATABASE: $DB_DATABASE
+    DB_USERNAME: $DB_USERNAME
+    DB_PASSWORD: $DB_PASSWORD
+    PGSSLMODE: require
+    PGCHANNELBINDING: require
+  only:
+    - main
 
-
-# deploy:
-#   stage: deploy
-#   image: curlimages/curl:latest
-#   script:
-#     - curl -X POST "$VERCEL_DEPLOY_HOOK_URL"
-#   only:
-#     - main
+deploy:
+  stage: deploy_migrate
+  image: ubuntu:22.04
+  before_script: []   # annule le default before_script
+  script:
+    - apt-get update && apt-get install -y curl
+    - curl -X POST "$VERCEL_DEPLOY_HOOK_URL"
+  only:
+    - main
